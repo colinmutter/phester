@@ -73,8 +73,8 @@ function buildContent(input, func, tests, secretKey) {
   // Strip php tags and re-add our own
   var content = util.format('<?php\n%s',
     input
-    .replace(new RegExp('<\?(php)?', 'mig'), '')
-    .replace(new RegExp('\\?>', 'mig'), '')
+    .replace(/<\?(php)?/, '', 'mig')
+    .replace(/\?>/, '', 'mig')
   );
 
   // Add assertions for user test cases
