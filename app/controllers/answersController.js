@@ -4,7 +4,7 @@ var locomotive = require('locomotive'),
   Question = require('../models').Question,
   AnswersController = new Controller(),
   auth = require('../../config/auth.js'),
-  runner = require('../../config/runner.js');
+  runner = require('../../config/runner-php.js');
 
 
 // Ensure logged in
@@ -36,12 +36,14 @@ AnswersController.run = function () {
             .then(function (answer) {
               self.res.json({
                 result: answer,
+                inputOrig: res.inputOrig,
                 error: null
               });
             })
             .catch(function (error) {
               self.res.json({
                 result: null,
+                inputOrig: res.inputOrig,
                 error: error
               });
             });
@@ -81,12 +83,14 @@ AnswersController.submit = function () {
             .then(function (answer) {
               self.res.json({
                 result: answer,
+                inputOrig: res.inputOrig,
                 error: null
               });
             })
             .catch(function (error) {
               self.res.json({
                 result: null,
+                inputOrig: res.inputOrig,
                 error: error
               });
             });

@@ -1,6 +1,6 @@
 /*
 
-  Creates a temp code file and runs it
+  Creates a temp code file and runs it in PHP
 
   example question record
   {
@@ -23,7 +23,7 @@ var temp = require('temp-write'),
   fs = require('fs'),
   util = require('util'),
   exec = require('child_process').exec,
-  binpath = process.env.PHP_PATH || '/usr/bin/php';
+  config = require('envcfg')(__dirname + '/../config/config.js');
 
 module.exports = function (input, func, tests, cb) {
 
@@ -33,15 +33,26 @@ module.exports = function (input, func, tests, cb) {
       return cb(err);
     }
     else {
-      exec(binpath + ' -f ' + path, function (err, stdout,
+      exec(config.bins.php + ' -f ' + path, function (err, stdout,
         stderr) {
 
         // Remove the temp file path from any errors
-        var output = stdout.trim().replace(path, 'your code').replace(
-          '/private', '');
-        var errors = stderr.trim().replace(path, 'your code').replace(
-          '/private', '');
-        cb(null, interpretResults(output, errors));
+        var output = stdout.trim().replace(new RegExp(path, 'mig'),
+          'your code').replace(new RegExp('/private', 'mig'), '');
+        var errors = stderr.trim().replace(new RegExp(path, 'mig'),
+          'your code').replace(new RegExp('/private', 'mig'), '');
+
+        // Determine if this is passing code or not and return
+        var decision = interpretResults(output, errors);
+
+        if (config.test.showGenCode) {
+          decision.inputOrig = content;
+        }
+        else {
+          decision.inputOrig = 'enable config.test.showGenCode to see this';
+        }
+
+        cb(null, decision);
       });
     }
   });
@@ -57,14 +68,19 @@ function buildContent(input, func, tests) {
 
     // Prep func template
     for (var param in test) {
-      if (param === 'results' || param === 'msg') continue;
-      func = func.replace(param, test[param]);
+      if (param === 'result' || param === 'msg') continue;
+      // Assign json stringified variables to be decoded in the native lang
+      content += util.format('\n%s = json_decode("%s", true);\n', param, JSON.stringify(
+        test[param]));
+      //func = func.replace(param, test[param]);
     }
 
     // Add our assertions to the file
     content += '\nassert(' + func + '===' + test.result + ', "' + test.msg +
       '");';
   }
+
+  content += util.format('\necho "%s";', config.test.secret);
   return content;
 }
 
@@ -77,10 +93,12 @@ function interpretResults(output, error) {
 
   // @TODO better error detection and smarter response messages
   if (error.length > 0 || output.match(/Warning|Error/i) || output.match(
-    /assert\(\)\: .* failed in your code/i)) {
+    /assert\(\)\: .* failed in your code/i) || !output.match(config.test.secret)) {
     decision.isSuccessful = false;
-    decision.output = decision.output.replace(/\n|\r\n/mig, ' ').replace(/call stack.*/igm, '');
-    decision.error = decision.error.replace(/\n|\r\n/mig, ' ').replace(/php stack trace.*/igm, '');
+    decision.output = decision.output.replace(/\n|\r\n/mig, ' ').replace(
+      /call stack.*/igm, '');
+    decision.error = decision.error.replace(/\n|\r\n/mig, ' ').replace(
+      /php stack trace.*/igm, '');
   }
 
   return decision;

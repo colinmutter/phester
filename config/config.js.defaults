@@ -17,6 +17,10 @@ module.exports = exports = {
     },
     "bins": {
       "php": process.env.PHP_PATH || "/usr/bin/php"
+    },
+    "test": {
+      "secret": "passing.tests.print.this",
+      "showGenCode": false // Returns and displays generated test code to the console
     }
   },
   "production": {
