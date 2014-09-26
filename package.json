@@ -1,6 +1,6 @@
 {
   "name": "phester",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "dependencies": {
     "bcrypt": "^0.8.0",
@@ -14,6 +14,7 @@
     "connect-timeout": "^1.3.0",
     "cookie-parser": "^1.3.3",
     "ejs": "0.8.x",
+    "envcfg": "^0.1.1",
     "express": "3.x.x",
     "express-favicon": "^1.0.1",
     "express-flash": "0.0.2",

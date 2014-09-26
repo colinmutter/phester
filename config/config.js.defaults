@@ -1,0 +1,23 @@
+/**
+ * Resource configuration
+ *   RENAME THIS FILE TO config.js and add your own config
+ */
+module.exports = exports = {
+  "*": {
+    "db": {
+      "database": "phester",
+      "user": "nobody",
+      "password": ""
+    },
+    "redis": {
+      "host": "127.0.0.1",
+      "port": "6379"
+    },
+    "bins": {
+      "php": process.env.PHP_PATH || "/usr/bin/php"
+    }
+  },
+  "production": {
+    // Override production configs here
+  }
+}

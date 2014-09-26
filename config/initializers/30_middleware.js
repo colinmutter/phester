@@ -23,7 +23,7 @@ module.exports = function () {
 
   var secret = 'Gold3nD00rCOOK!eZZ';
   this.use(poweredBy('Locomotive'));
-  this.use(function(req, res, next) {
+  this.use(function (req, res, next) {
     res.set('Access-Control-Allow-Origin', '*');
     next();
   });
@@ -37,8 +37,8 @@ module.exports = function () {
     secret: secret,
     name: 'gdsessid',
     store: new RedisStore({
-      host: '127.0.0.1',
-      port: '6379'
+      host: this.config.redis.host,
+      port: this.config.redis.port
     }),
     resave: true,
     saveUninitialized: true
