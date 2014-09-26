@@ -4,7 +4,11 @@ module.exports = function (done) {
 
   // the application is executed on the local machine ... use mysql
   var sequelize = new Sequelize(this.config.db.database, this.config.db.user,
-    this.config.db.host);
+    this.config.db.password, {
+      host: this.config.db.host,
+      port: this.config.db.port
+    });
+
   var modelPath = __dirname + '/../../app/models';
   var registry = require(modelPath);
 
