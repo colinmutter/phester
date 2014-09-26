@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
 
   var questionIds = [];
@@ -7,7 +6,8 @@ $(document).ready(function () {
   // Show the username and a random wavatar
   var username = $.cookie('phester_username');
   $('#username').text(username);
-  $('#avatar').attr('src', 'http://www.gravatar.com/avatar/' + CryptoJS.MD5(username) + '?d=wavatar');
+  $('#avatar').attr('src', 'http://www.gravatar.com/avatar/' + CryptoJS.MD5(
+    username) + '?d=wavatar');
 
   // Fetch the questions from the server
   showLoader('Loading questions');
@@ -27,7 +27,7 @@ $(document).ready(function () {
       handleAjaxError(jqXHR, textStatus, errorThrown);
     },
 
-    complete: function() {
+    complete: function () {
       hideLoader();
     }
   });
@@ -58,8 +58,10 @@ $(document).ready(function () {
     if (questionNum == 1) {
       tabHtml += ' class="active"';
     }
-    tabHtml += '><a href="#question' + questionNum + '" role="tab" data-toggle="tab">Q' + questionNum;
-    tabHtml += '<i id="question-tick-' + question.id + '" class="question-tick fa"></i></a></li>';
+    tabHtml += '><a href="#question' + questionNum +
+      '" role="tab" data-toggle="tab">Q' + questionNum;
+    tabHtml += '<i id="question-tick-' + question.id +
+      '" class="question-tick fa"></i></a></li>';
     $('#question-tabs').append(tabHtml);
 
     var tabContent = $('#question-content-to-clone').clone();
@@ -76,13 +78,16 @@ $(document).ready(function () {
         inputOutput.append('<div class="col-sm-12"><hr></div>');
       }
 
-      var inputHtml = '<div class="col-xs-3 goleft"><p>Input:</p></div><div class="col-xs-9"><p>';
+      var inputHtml =
+        '<div class="col-xs-3 goleft"><p>Input:</p></div><div class="col-xs-9"><p>';
       inputHtml += formatInput(sampleInput[i]);
-      inputHtml += '</p></div><div class="col-xs-3 goleft"><p>Output:</p></div><div class="col-xs-9"><p>';
+      inputHtml +=
+        '</p></div><div class="col-xs-3 goleft"><p>Output:</p></div><div class="col-xs-9"><p>';
       inputHtml += sampleInput[i].result;
 
       if (sampleInput[i].msg) {
-        inputHtml += '</p></div><div class="col-xs-3 goleft"><p>Note:</p></div><div class="col-xs-9"><p>';
+        inputHtml +=
+          '</p></div><div class="col-xs-3 goleft"><p>Note:</p></div><div class="col-xs-9"><p>';
         inputHtml += sampleInput[i].msg;
       }
 
@@ -93,7 +98,8 @@ $(document).ready(function () {
     var editor = tabContent.find('.editor :first');
     // Give the editor a unique ID
     editor.attr('id', 'question-editor-' + question.id);
-    var initialText = '<?php\nfunction ' + question.entryFunction + ' {\n    // Put your code here!\n}';
+    var initialText = '<?php\nfunction ' + question.entryFunction +
+      ' {\n    // Put your code here!\n}';
     editor.text(initialText);
 
     // Init the Ace editor
@@ -108,7 +114,8 @@ $(document).ready(function () {
     });
 
     // Give the output section a unique ID
-    tabContent.find('.question-output :first').attr('id', 'question-output-' + question.id);
+    tabContent.find('.question-output :first').attr('id', 'question-output-' +
+      question.id);
 
     // Make the first question active by default
     if (index == 0) {
@@ -129,12 +136,12 @@ $(document).ready(function () {
 
   function showLoader(text) {
     $('body').waitMe({
-      effect: 'win8',  //none, rotateplane, stretch, orbit, roundBounce, win8, win8_linear, ios, facebook, rotation, timer, pulse.
-      text: text || '',             //place text under the effect (string).
-      bg: 'rgba(255,255,255,0.7)',  //background for container (string).
-      color: '#000',                //color for background animation and text (string).
-      sizeW: '',                    //change width for elem animation (string).
-      sizeH: ''                     //change height for elem animation (string).
+      effect: 'win8', //none, rotateplane, stretch, orbit, roundBounce, win8, win8_linear, ios, facebook, rotation, timer, pulse.
+      text: text || '', //place text under the effect (string).
+      bg: 'rgba(255,255,255,0.7)', //background for container (string).
+      color: '#000', //color for background animation and text (string).
+      sizeW: '', //change width for elem animation (string).
+      sizeH: '' //change height for elem animation (string).
     });
   }
 
@@ -184,7 +191,7 @@ $(document).ready(function () {
         handleAjaxError(jqXHR, textStatus, errorThrown);
       },
 
-      complete: function() {
+      complete: function () {
         hideLoader();
       }
     });
@@ -192,12 +199,16 @@ $(document).ready(function () {
 
   // Submit test button
   $('#submit-button').click(function (e) {
-    $('#submit-modal').modal({ show: true });
+    $('#submit-modal').modal({
+      show: true
+    });
   });
 
   // Submit test confirm
   $('#submit-button-confirm').click(function (e) {
-    var data = { questions: [] };
+    var data = {
+      questions: []
+    };
 
     for (var i = 0; i < questionIds.length; i++) {
       data.questions.push({
@@ -216,14 +227,14 @@ $(document).ready(function () {
       encode: true,
 
       success: function (data, textStatus, jqXHR) {
-        window.location = 'done.html';
+        window.location = '/done';
       },
 
       error: function (jqXHR, textStatus, errorThrown) {
         handleAjaxError(jqXHR, textStatus, errorThrown);
       },
 
-      complete: function() {
+      complete: function () {
         hideLoader();
       }
     });
@@ -231,7 +242,7 @@ $(document).ready(function () {
 
   function handleAjaxError(jqXHR, textStatus, errorThrown) {
     if (jqXHR.statusCode().status == 403) {
-      window.location = 'login.html';
+      window.location = '/login';
       return;
     }
 
@@ -242,22 +253,24 @@ $(document).ready(function () {
       $('#error-msg').text(textStatus);
     }
 
-    $('#error-modal').modal({ show: true });
+    $('#error-modal').modal({
+      show: true
+    });
   }
 
-//        var unique_id = $.gritter.add({
-//            // (string | mandatory) the heading of the notification
-//            title: 'Welcome to Dashgum!',
-//            // (string | mandatory) the text inside the notification
-//            text: 'Hover me to enable the Close Button. You can hide the left sidebar clicking on the button next to the logo. Free version for <a href="http://blacktie.co" target="_blank" style="color:#ffd777">BlackTie.co</a>.',
-//            // (string | optional) the image to display on the left
-//            image: 'assets/img/ui-sam.jpg',
-//            // (bool | optional) if you want it to fade out on its own or just sit there
-//            sticky: true,
-//            // (int | optional) the time you want it to be alive for before fading out
-//            time: '',
-//            // (string | optional) the class name you want to apply to that specific message
-//            class_name: 'my-sticky-class'
-//        });
+  //        var unique_id = $.gritter.add({
+  //            // (string | mandatory) the heading of the notification
+  //            title: 'Welcome to Dashgum!',
+  //            // (string | mandatory) the text inside the notification
+  //            text: 'Hover me to enable the Close Button. You can hide the left sidebar clicking on the button next to the logo. Free version for <a href="http://blacktie.co" target="_blank" style="color:#ffd777">BlackTie.co</a>.',
+  //            // (string | optional) the image to display on the left
+  //            image: 'assets/img/ui-sam.jpg',
+  //            // (bool | optional) if you want it to fade out on its own or just sit there
+  //            sticky: true,
+  //            // (int | optional) the time you want it to be alive for before fading out
+  //            time: '',
+  //            // (string | optional) the class name you want to apply to that specific message
+  //            class_name: 'my-sticky-class'
+  //        });
 
 });

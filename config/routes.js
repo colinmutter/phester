@@ -46,6 +46,7 @@ module.exports = function routes() {
    */
   this.get('login', 'pages#login');
   this.get('test', 'pages#test');
+  this.get('done', 'pages#done');
   this.match('logout', 'pages#logout');
   this.match('whoami', 'pages#whoami');
   this.post('login', auth);

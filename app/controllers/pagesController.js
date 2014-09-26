@@ -18,6 +18,10 @@ pagesController.test = function () {
   });
 }
 
+pagesController.done = function () {
+  this.render();
+}
+
 pagesController.login = function () {
   this.render();
 }
