@@ -40,6 +40,18 @@ $(document).ready(function () {
       if (obj[prop] instanceof Array) {
         str += '[ ' + obj[prop] + ' ]';
       }
+      else if (obj[prop] instanceof Object) {
+        str += '[ ';
+        var first = true;
+        for (var p in obj[prop]) {
+          if (!first) {
+            str += ', ';
+          }
+          str += p + '=>' + obj[prop][p];
+          first = false;
+        }
+        str += ' ]';
+      }
       else {
         str += obj[prop];
       }
