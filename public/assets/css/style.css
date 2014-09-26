@@ -91,7 +91,13 @@ a, a:hover, a:focus {
 	text-decoration: none;
 }	
 
+.nav-tabs > li > a {
+    border: 1px solid #ddd;
+}
 
+.nav-tabs > li > a:hover {
+    border: 1px solid #ddd;
+}
 
 /*Theme Backgrounds*/
 
