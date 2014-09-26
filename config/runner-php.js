@@ -50,7 +50,7 @@ module.exports = function (input, func, tests, cb) {
         var decision = interpretResults(output, errors);
 
         // Remove secret key
-        decision.output.replace(secretKey, '');
+        decision.output = decision.output.replace(secretKey, '');
 
         // If we want to show the generated code to the user, return that here..
         if (config.test.showGenCode) {
@@ -86,15 +86,36 @@ function buildContent(input, func, tests, secretKey) {
     // Prep func template
     for (var param in test) {
       if (param === 'result' || param === 'msg') continue;
-      // Assign json stringified variables to be decoded in the native lang
-      content += util.format('\n%s = json_decode("%s", true);\n', param, JSON.stringify(
-        test[param]));
-      //func = func.replace(param, test[param]);
+
+      // Get the test input values
+      var paramVal = 0;
+      try {
+        var paramVal = JSON.stringify(test[param]);
+      }
+      catch (e) {
+        console.error(e);
+      }
+      // Export the test input values to the native lang
+      content += util.format(
+        '\n%s = json_decode(\'%s\', true);',
+        param,
+        paramVal);
     }
 
+    // Get the expected value
+    var expected = 0;
+    try {
+      expected = JSON.stringify(test.result);
+    }
+    catch (e) {
+      console.error(e);
+    }
+
+    // Export the expected value
+    content += util.format('\n$result = json_decode(\'%s\', true);', expected);
+
     // Add our assertions to the file
-    content += '\nassert(' + func + '===' + test.result + ', "' + test.msg +
-      '");';
+    content += util.format('\nassert(%s === $result, "%s");', func, test.msg);
   }
 
   content += util.format('\n\n/* Completion Key */\necho "%s";', secretKey);
