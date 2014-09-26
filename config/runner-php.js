@@ -37,7 +37,9 @@ module.exports = function (input, func, tests, cb) {
       return cb(err);
     }
     else {
-      exec(config.bins.php + ' -f ' + path, function (err, stdout,
+      exec(config.bins.php + ' -f ' + path, {
+        timeout: 5000
+      }, function (err, stdout,
         stderr) {
 
         // Remove the temp file path from any errors
@@ -45,6 +47,12 @@ module.exports = function (input, func, tests, cb) {
           'your code').replace(new RegExp('/private', 'mig'), '');
         var errors = stderr.trim().replace(new RegExp(path, 'mig'),
           'your code').replace(new RegExp('/private', 'mig'), '');
+
+
+        // Check for timeout, override all other errors
+        if (err && err.killed) {
+          errors = output = "Error! Maximum timeout exceeded.";
+        }
 
         // Determine if this is passing code or not and return
         var decision = interpretResults(output, errors);
@@ -128,7 +136,7 @@ function interpretResults(output, error, secretKey) {
     output: output,
     error: error
   };
-
+  console.log(error);
   // @TODO better error detection and smarter response messages
   if (error.length > 0 || output.match(/Warning|Error/i) || output.match(
     /assert\(\)\: .* failed in your code/i) || !output.match(secretKey)) {
