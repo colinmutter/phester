@@ -79,6 +79,8 @@ function interpretResults(output, error) {
   if (error.length > 0 || output.match(/Warning|Error/i) || output.match(
     /assert\(\)\: .* failed in your code/i)) {
     decision.isSuccessful = false;
+    decision.output = decision.output.replace(/\n|\r\n/mig, ' ').replace(/call stack.*/igm, '');
+    decision.error = decision.error.replace(/\n|\r\n/mig, ' ').replace(/php stack trace.*/igm, '');
   }
 
   return decision;
