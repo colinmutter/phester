@@ -7,15 +7,19 @@ module.exports = function routes() {
     failureRedirect: '/login'
   });
 
-  var authJson = function(req, res, next) {
-    passport.authenticate('local', function(err, user, info) {
-      if (err) { return next(err); }
+  var authJson = function (req, res, next) {
+    passport.authenticate('local', function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
       if (!user) {
         return res.send(403);
       }
 
-      req.logIn(user, function(err) {
-        if (err) { return next(err); }
+      req.logIn(user, function (err) {
+        if (err) {
+          return next(err);
+        }
 
         return res.json({
           username: user.username,
@@ -41,6 +45,7 @@ module.exports = function routes() {
    * User auth
    */
   this.get('login', 'pages#login');
+  this.get('test', 'pages#test');
   this.match('logout', 'pages#logout');
   this.match('whoami', 'pages#whoami');
   this.post('login', auth);

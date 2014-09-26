@@ -4,8 +4,18 @@ var locomotive = require('locomotive'),
 var pagesController = new Controller();
 
 pagesController.main = function () {
-  this.title = 'PHester - The PHP Testing Platform';
-  this.render();
+  if (!this.req.user) {
+    this.redirect('/login');
+  }
+  else {
+    this.redirect('/test');
+  }
+}
+
+pagesController.test = function () {
+  this.render({
+    user: this.req.user.username
+  });
 }
 
 pagesController.login = function () {
