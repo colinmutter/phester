@@ -86,7 +86,8 @@ $(document).ready(function () {
     var editor = tabContent.find('.editor :first');
     // Give the editor a unique ID
     editor.attr('id', 'question-editor-' + question.id);
-    editor.text(question.entryFunction);
+    var initialText = '<?php\nfunction ' + question.entryFunction + ' {\n    // Put your code here!\n}';
+    editor.text(initialText);
 
     // Init the Ace editor
     var aceEditor = ace.edit(editor[0]);
@@ -154,9 +155,16 @@ $(document).ready(function () {
         var tabEl = $('#question-tick-' + questionId);
 
         if (data.result) {
-          outputEl.addClass('alert-success').removeClass('alert-danger');
-          tabEl.addClass('fa-check');
-          outputEl.text(data.output);
+          if (data.result.isSuccessful) {
+            outputEl.addClass('alert-success').removeClass('alert-danger');
+            tabEl.addClass('fa-check');
+            outputEl.text('Success!');
+          }
+          else {
+            outputEl.addClass('alert-danger').removeClass('alert-success');
+            tabEl.removeClass('fa-check');
+            outputEl.text(data.result.error);
+          }
         }
         else {
           outputEl.addClass('alert-danger').removeClass('alert-success');
@@ -216,8 +224,7 @@ $(document).ready(function () {
 
   function handleAjaxError(jqXHR, textStatus, errorThrown) {
     if (jqXHR.statusCode().status == 403) {
-      console.log('403!!!');
-      //window.location = 'login.html';
+      window.location = 'login.html';
       return;
     }
 
