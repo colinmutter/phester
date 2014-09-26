@@ -41,22 +41,37 @@ $(document).ready(function () {
         str += '[ ' + obj[prop] + ' ]';
       }
       else if (obj[prop] instanceof Object) {
-        str += '[ ';
-        var first = true;
-        for (var p in obj[prop]) {
-          if (!first) {
-            str += ', ';
-          }
-          str += p + '=>' + obj[prop][p];
-          first = false;
-        }
-        str += ' ]';
+        str += formatObject(obj[prop]);
       }
       else {
         str += obj[prop];
       }
       str += ' &nbsp;&nbsp; ';
     }
+    return str;
+  }
+
+  function formatOutput(output) {
+    if (output instanceof Array) {
+      return '[ ' + output + ' ]';
+    }
+    if (output instanceof Object) {
+      return formatObject(output);
+    }
+    return output;
+  }
+
+  function formatObject(obj) {
+    var str = '[ ';
+    var first = true;
+    for (var p in obj) {
+      if (!first) {
+        str += ', ';
+      }
+      str += p + '=>' + obj[p];
+      first = false;
+    }
+    str += ' ]';
     return str;
   }
 
@@ -91,7 +106,7 @@ $(document).ready(function () {
       var inputHtml = '<div class="col-xs-3 goleft"><p>Input:</p></div><div class="col-xs-9"><p>';
       inputHtml += formatInput(sampleInput[i]);
       inputHtml += '</p></div><div class="col-xs-3 goleft"><p>Output:</p></div><div class="col-xs-9"><p>';
-      inputHtml += sampleInput[i].result;
+      inputHtml += formatOutput(sampleInput[i].result);
 
       if (sampleInput[i].msg) {
         inputHtml += '</p></div><div class="col-xs-3 goleft"><p>Note:</p></div><div class="col-xs-9"><p>';
