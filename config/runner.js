@@ -23,7 +23,7 @@ var temp = require('temp-write'),
   fs = require('fs'),
   util = require('util'),
   exec = require('child_process').exec,
-  binpath = process.env.PHP_PATH || '/usr/local/bin/php';
+  binpath = process.env.PHP_PATH || '/usr/bin/php';
 
 module.exports = function (input, func, tests, cb) {
 
