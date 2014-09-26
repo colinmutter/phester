@@ -14,6 +14,7 @@ AnswersController.before('*', auth.ensureLoggedIn);
 AnswersController.run = function () {
   var self = this;
   var params = this.req.body;
+  params.userId = this.req.user.id;
 
   Question.find(params.questionId)
     .then(function (question) {
