@@ -108,7 +108,6 @@ $(document).ready(function () {
       var inputHtml =
         '<div class="col-xs-3 goleft"><p>Input:</p></div><div class="col-xs-9"><p>';
       inputHtml += formatInput(sampleInput[i]);
-      inputHtml +=
       inputHtml += '</p></div><div class="col-xs-3 goleft"><p>Output:</p></div><div class="col-xs-9"><p>';
       inputHtml += formatOutput(sampleInput[i].result);
 
