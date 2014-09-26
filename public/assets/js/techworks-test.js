@@ -36,7 +36,14 @@ $(document).ready(function () {
     var str = '';
     for (var prop in obj) {
       if (prop === 'result' || prop === 'results' || prop === 'msg') continue;
-      str += prop + ' = ' + obj[prop] + ' &nbsp;&nbsp; ';
+      str += prop + ' = ';
+      if (obj[prop] instanceof Array) {
+        str += '[ ' + obj[prop] + ' ]';
+      }
+      else {
+        str += obj[prop];
+      }
+      str += ' &nbsp;&nbsp; ';
     }
     return str;
   }
@@ -51,7 +58,7 @@ $(document).ready(function () {
     if (questionNum == 1) {
       tabHtml += ' class="active"';
     }
-    tabHtml += '><a href="#question' + questionNum + '" role="tab" data-toggle="tab">Question ' + questionNum;
+    tabHtml += '><a href="#question' + questionNum + '" role="tab" data-toggle="tab">Q' + questionNum;
     tabHtml += '<i id="question-tick-' + question.id + '" class="question-tick fa"></i></a></li>';
     $('#question-tabs').append(tabHtml);
 
@@ -163,7 +170,7 @@ $(document).ready(function () {
           else {
             outputEl.addClass('alert-danger').removeClass('alert-success');
             tabEl.removeClass('fa-check');
-            outputEl.text(data.result.error);
+            outputEl.text(data.result.output);
           }
         }
         else {
