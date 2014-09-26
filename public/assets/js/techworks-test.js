@@ -224,8 +224,7 @@ $(document).ready(function () {
 
   function handleAjaxError(jqXHR, textStatus, errorThrown) {
     if (jqXHR.statusCode().status == 403) {
-      console.log('403!!!');
-      //window.location = 'login.html';
+      window.location = 'login.html';
       return;
     }
 
