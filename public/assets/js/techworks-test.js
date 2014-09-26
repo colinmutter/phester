@@ -203,7 +203,12 @@ $(document).ready(function () {
           else {
             outputEl.addClass('alert-danger').removeClass('alert-success');
             tabEl.removeClass('fa-check');
-            outputEl.text(data.result.output);
+            if (data.result.output.length == 0) {
+              outputEl.text(data.result.error);
+            }
+            else {
+              outputEl.text(data.result.output);
+            }
             if (window.console) {
               console.error('Code run failed using:\n' + data.inputOrig);
             }
