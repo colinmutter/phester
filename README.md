@@ -1,6 +1,6 @@
 #phester
 
-A [locomotivejs](http://locomotivejs.org/) concept for a programming testing/exam platform.  Currently it only supports PHP.  Yes, you heard that right. Eventually we're planning on teting it out with docker containers for other language compatibility.
+A [locomotivejs](http://locomotivejs.org/) concept for a programming testing/exam platform.  Currently it only supports PHP.  Yes, you heard that right. Eventually we're planning on testing it out with docker containers for other language compatibility.
 
 This is a *work in progress* .
 
