@@ -21,6 +21,7 @@ AnswersController.run = function () {
 
       // @todo validate this on input so try/catch no needed
       var testInput = JSON.parse(question.testInput);
+
       runner(params.input, question.entryFunction, testInput,
         function (err, res) {
           params.output = res.output;

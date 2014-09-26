@@ -23,11 +23,15 @@ var temp = require('temp-write'),
   fs = require('fs'),
   util = require('util'),
   exec = require('child_process').exec,
+  crypto = require('crypto'),
   config = require('envcfg')(__dirname + '/../config/config.js');
 
 module.exports = function (input, func, tests, cb) {
 
-  var content = buildContent(input, func, tests);
+  var secretKey = crypto.randomBytes(24).toString("base64");
+  var content = buildContent(input, func, tests, secretKey);
+
+  // Generate temp file
   temp(content, function (err, path) {
     if (err) {
       return cb(err);
@@ -45,6 +49,10 @@ module.exports = function (input, func, tests, cb) {
         // Determine if this is passing code or not and return
         var decision = interpretResults(output, errors);
 
+        // Remove secret key
+        decision.output.replace(secretKey, '');
+
+        // If we want to show the generated code to the user, return that here..
         if (config.test.showGenCode) {
           decision.inputOrig = content;
         }
@@ -52,17 +60,26 @@ module.exports = function (input, func, tests, cb) {
           decision.inputOrig = 'enable config.test.showGenCode to see this';
         }
 
+        // Send it all back
         cb(null, decision);
       });
     }
   });
 
-}
+};
 
-function buildContent(input, func, tests) {
+function buildContent(input, func, tests, secretKey) {
+
   // Strip php tags and re-add our own
-  var content = "<?php\n\n" + input.replace('<?php', '').replace('?>', '') +
-    "\n\n\n";
+  var content = util.format('<?php\n%s',
+    input
+    .replace(new RegExp('<\?(php)?', 'mig'), '')
+    .replace(new RegExp('\\?>', 'mig'), '')
+  );
+
+  // Add assertions for user test cases
+  content += '\n\n\n/* Internal Assertions: */';
+
   for (var i = 0, j = tests.length; i < j; i++) {
     var test = tests[i];
 
@@ -80,11 +97,11 @@ function buildContent(input, func, tests) {
       '");';
   }
 
-  content += util.format('\necho "%s";', config.test.secret);
+  content += util.format('\n\n/* Completion Key */\necho "%s";', secretKey);
   return content;
 }
 
-function interpretResults(output, error) {
+function interpretResults(output, error, secretKey) {
   var decision = {
     isSuccessful: true,
     output: output,
@@ -93,7 +110,7 @@ function interpretResults(output, error) {
 
   // @TODO better error detection and smarter response messages
   if (error.length > 0 || output.match(/Warning|Error/i) || output.match(
-    /assert\(\)\: .* failed in your code/i) || !output.match(config.test.secret)) {
+    /assert\(\)\: .* failed in your code/i) || !output.match(secretKey)) {
     decision.isSuccessful = false;
     decision.output = decision.output.replace(/\n|\r\n/mig, ' ').replace(
       /call stack.*/igm, '');
