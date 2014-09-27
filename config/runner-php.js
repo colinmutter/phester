@@ -122,11 +122,12 @@ function buildContent(input, func, tests, secretKey) {
     content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace('\'', '\\'));
 
     // Add our assertions to the file
-    content += util.format('\nassert(%s === $result, \'%s\');', func, test.msg.replace('\'', '\\'));
+    content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace('\'', '\\'));
 
   }
 
   content += util.format('\n\n/* Completion Key */\necho "%s";', secretKey);
+  console.log(content);
   return content;
 }
 
