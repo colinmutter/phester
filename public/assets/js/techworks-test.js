@@ -128,7 +128,7 @@ $(document).ready(function () {
     // If the user previously submitted a solution to the question, populate the editor with the submission.
     // Otherwise, setup the initial code.
     if (question.lastSubmission) {
-      editor.text = question.lastSubmission;
+      editor.text(question.lastSubmission);
       if (question.lastSubmissionSuccess) {
         $('#question-tick-' + question.id).addClass('fa-check');
       }
