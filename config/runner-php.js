@@ -30,7 +30,6 @@ module.exports = function (input, func, tests, cb) {
 
   var secretKey = crypto.randomBytes(24).toString("base64");
   var content = buildContent(input, func, tests, secretKey);
-
   // Generate temp file
   temp(content, function (err, path) {
     if (err) {
@@ -91,6 +90,8 @@ function buildContent(input, func, tests, secretKey) {
   for (var i = 0, j = tests.length; i < j; i++) {
     var test = tests[i];
 
+    content += '\necho "\\nTest ' + (i + 1) + ' Output:\\n";';
+
     // Prep func template
     for (var param in test) {
       if (param === 'result' || param === 'msg') continue;
@@ -107,7 +108,7 @@ function buildContent(input, func, tests, secretKey) {
       content += util.format(
         '\n%s = json_decode(\'%s\', true);',
         param,
-        paramVal);
+        paramVal.replace('\'', '\\'));
     }
 
     // Get the expected value
@@ -120,10 +121,11 @@ function buildContent(input, func, tests, secretKey) {
     }
 
     // Export the expected value
-    content += util.format('\n$result = json_decode(\'%s\', true);', expected);
+    content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace('\'', '\\'));
 
     // Add our assertions to the file
-    content += util.format('\nassert(%s === $result, "%s");', func, test.msg);
+    content += util.format('\nassert(%s === $result, \'%s\');', func, test.msg.replace('\'', '\\'));
+
   }
 
   content += util.format('\n\n/* Completion Key */\necho "%s";', secretKey);
