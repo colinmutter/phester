@@ -17,6 +17,9 @@ module.exports = function (done) {
   registry.register(sequelize.import(modelPath + '/question'));
   registry.register(sequelize.import(modelPath + '/answer'));
 
+  this.sequelize = sequelize;
+  this.Sequelize = Sequelize;
+
   sequelize.sync()
     .then(function () {
       done();

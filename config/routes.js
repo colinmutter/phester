@@ -38,6 +38,7 @@ module.exports = function routes() {
   /**
    * REST scaffolding
    */
+  this.resources('answers');
   this.resources('questions');
   this.resources('users');
 

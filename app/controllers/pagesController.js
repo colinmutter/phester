@@ -1,40 +1,75 @@
+/**
+ * Pages Controller
+ *
+ * Standard UI pages
+ *
+ * @author  Colin Mutter <colin.mutter@gmail.com>
+ */
+
+/**
+ * Deps
+ */
 var locomotive = require('locomotive'),
-  Controller = locomotive.Controller;
+  Controller = locomotive.Controller,
+  PagesController = new Controller(),
+  auth = require('../../config/auth.js');
 
-var pagesController = new Controller();
+/**
+ * Login before starting the test...
+ */
+PagesController.before(['test', 'main', 'whoami'], auth.ensureLoggedIn);
 
-pagesController.main = function () {
-  if (!this.req.user) {
-    this.redirect('/login');
-  }
-  else {
-    this.redirect('/test');
-  }
+/**
+ * Expose
+ */
+module.exports = PagesController;
+
+/**
+ * Site root, redirect to test
+ */
+PagesController.main = function () {
+  this.redirect('/test');
 }
 
-pagesController.test = function () {
+/**
+ * Actual test endpoint
+ */
+PagesController.test = function () {
   this.render({
     user: this.req.user.username
   });
 }
 
-pagesController.done = function () {
+/**
+ * Completed test endpoint
+ */
+PagesController.done = function () {
   this.render();
 }
 
-pagesController.login = function () {
+/**
+ * Login endpoint
+ */
+PagesController.login = function () {
+  if (this.req.user) {
+    return this.redirect('/test');
+  }
   this.render();
 }
 
-pagesController.logout = function () {
+/**
+ * Logout endpoint
+ */
+PagesController.logout = function () {
   this.req.logout();
   this.redirect('/');
 }
 
-pagesController.whoami = function () {
+/**
+ * Service to retrieve credentials
+ */
+PagesController.whoami = function () {
   this.res.json({
     identity: this.req.user
   });
 }
-
-module.exports = pagesController;

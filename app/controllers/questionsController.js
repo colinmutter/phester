@@ -1,3 +1,14 @@
+/**
+ * Questions Controller
+ *
+ * Basic CRUD ops for test questions
+ *
+ * @author  Colin Mutter <colin.mutter@gmail.com>
+ */
+
+/**
+ * Deps
+ */
 var locomotive = require('locomotive'),
   Controller = locomotive.Controller,
   Question = require('../models').Question,
@@ -5,6 +16,11 @@ var locomotive = require('locomotive'),
   QuestionsController = new Controller(),
   passport = require('passport'),
   auth = require('../../config/auth.js');
+
+/**
+ * Expose
+ */
+module.exports = QuestionsController;
 
 // Ensure logged in
 QuestionsController.before('*', auth.ensureLoggedIn);
@@ -132,5 +148,3 @@ QuestionsController.update = function () {
       self.redirect(editPath);
     });
 };
-
-module.exports = QuestionsController;
