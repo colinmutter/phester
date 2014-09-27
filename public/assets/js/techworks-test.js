@@ -124,9 +124,20 @@ $(document).ready(function () {
     var editor = tabContent.find('.editor :first');
     // Give the editor a unique ID
     editor.attr('id', 'question-editor-' + question.id);
-    var initialText = '<?php\nfunction ' + question.entryFunction +
-      ' {\n    // Put your code here!\n}';
-    editor.text(initialText);
+
+    // If the user previously submitted a solution to the question, populate the editor with the submission.
+    // Otherwise, setup the initial code.
+    if (question.lastSubmission) {
+      editor.text = question.lastSubmission;
+      if (question.lastSubmissionSuccess) {
+        $('#question-tick-' + question.id).addClass('fa-check');
+      }
+    }
+    else {
+      var initialText = '<?php\nfunction ' + question.entryFunction +
+        ' {\n    // Put your code here!\n}';
+      editor.text(initialText);
+    }
 
     // Init the Ace editor
     var aceEditor = ace.edit(editor[0]);
