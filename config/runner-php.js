@@ -105,7 +105,7 @@ function buildContent(input, func, tests, secretKey) {
       content += util.format(
         '\n%s = json_decode(\'%s\', true);',
         param,
-        paramVal.replace('\'', '\\'));
+        paramVal.replace(/\'/, '\\\''));
     }
 
     // Get the expected value
@@ -118,11 +118,11 @@ function buildContent(input, func, tests, secretKey) {
     }
 
     // Export the expected value
-    content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace('\'', '\\\''));
+    content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace(/\'/g, '\\\''));
 
 
     // Add our assertions to the file
-    content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace('\'', '\\\''));
+    content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace(/\'/g, '\\\''));
 
   }
 
