@@ -54,7 +54,7 @@ module.exports = function (input, func, tests, cb) {
         }
 
         // Determine if this is passing code or not and return
-        var decision = interpretResults(output, errors);
+        var decision = interpretResults(output, errors, secretKey);
 
         // Remove secret key
         decision.output = decision.output.replace(secretKey, '');
@@ -117,14 +117,16 @@ function buildContent(input, func, tests, secretKey) {
       console.error(e);
     }
     // Export the expected value
-    content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace(/\'/g, '\\\''));
+    content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace(
+      /\'/g, '\\\''));
 
     // just in case something isnt right
     if (!test.msg) {
       test.msg = '';
     }
     // Add our assertions to the file
-    content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace(/\'/g, '\\\''));
+    content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace(
+      /\'/g, '\\\''));
 
   }
 
