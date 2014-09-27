@@ -1,6 +1,7 @@
 var locomotive = require('locomotive'),
   Controller = locomotive.Controller,
   Question = require('../models').Question,
+  Answer = require('../models').Answer,
   QuestionsController = new Controller(),
   passport = require('passport'),
   auth = require('../../config/auth.js');
@@ -14,11 +15,10 @@ QuestionsController.before(['new', 'create', 'edit', 'update'], auth.ensureAdmin
 QuestionsController.index = function () {
   var self = this;
 
-  // load all Users
-  Question.findAll()
-    .then(function (users) {
-      self.res.json(users);
-    })
+  // get the users last answer also
+  Question.getQuestionsWithLastAnswers(self.req.user.id).then(function (users) {
+    self.res.json(users);
+  })
     .catch(function (error) {
       self.res.json(error);
     });

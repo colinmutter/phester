@@ -116,11 +116,13 @@ function buildContent(input, func, tests, secretKey) {
     catch (e) {
       console.error(e);
     }
-
     // Export the expected value
     content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace(/\'/g, '\\\''));
 
-
+    // just in case something isnt right
+    if (!test.msg) {
+      test.msg = '';
+    }
     // Add our assertions to the file
     content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace(/\'/g, '\\\''));
 
