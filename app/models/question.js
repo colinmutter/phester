@@ -44,7 +44,8 @@ module.exports = function (sequelize, DataTypes) {
           return sequelize.query(
             "SELECT  Q.*,  (SELECT isSuccessful FROM Answers WHERE questionId = Q.id AND userId = " +
             userId +
-            " ORDER BY id DESC LIMIT 1) AS lastSubmissionSuccess,  (SELECT input FROM Answers WHERE questionId = Q.id AND userId = 1 ORDER BY id DESC LIMIT 1) AS lastSubmission FROM  Questions Q "
+            " ORDER BY id DESC LIMIT 1) AS lastSubmissionSuccess,  (SELECT input FROM Answers WHERE questionId = Q.id AND userId = " +
+            userId + " ORDER BY id DESC LIMIT 1) AS lastSubmission FROM  Questions Q "
           );    
         }  
       }
