@@ -86,7 +86,6 @@ function buildContent(input, func, tests, secretKey) {
 
   // Add assertions for user test cases
   content += '\n\n\n/* Internal Assertions: */';
-
   for (var i = 0, j = tests.length; i < j; i++) {
     var test = tests[i];
 
@@ -119,10 +118,11 @@ function buildContent(input, func, tests, secretKey) {
     }
 
     // Export the expected value
-    content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace('\'', '\\'));
+    content += util.format('\n$result = json_decode(\'%s\', true);', expected.replace('\'', '\\\''));
+
 
     // Add our assertions to the file
-    content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace('\'', '\\'));
+    content += util.format('\nassert(%s == $result, \'%s\');', func, test.msg.replace('\'', '\\\''));
 
   }
 
