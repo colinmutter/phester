@@ -90,8 +90,6 @@ function buildContent(input, func, tests, secretKey) {
   for (var i = 0, j = tests.length; i < j; i++) {
     var test = tests[i];
 
-    content += '\necho "\\nTest ' + (i + 1) + ' Output:\\n";';
-
     // Prep func template
     for (var param in test) {
       if (param === 'result' || param === 'msg') continue;
