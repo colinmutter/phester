@@ -144,7 +144,8 @@ function interpretResults(output, error, secretKey) {
   console.log(error);
   // @TODO better error detection and smarter response messages
   if (error.length > 0 || output.match(/Warning|Error/i) || output.match(
-    /assert\(\)\: .* failed in your code/i) || !output.match(secretKey)) {
+      /assert\(\)\: .* failed in your code/i) || output.indexOf(secretKey) == -
+    1) {
     decision.isSuccessful = false;
     decision.output = decision.output.replace(/\n|\r\n/mig, ' ').replace(
       /call stack.*/igm, '');
